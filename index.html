@@ -1,1 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MiniPaws – Tiny Poodle Questionnaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f9f4f0;
+      --card-bg: #ffffff;
+      --accent: #f05454;
+      --accent-soft: #ffe1dd;
+      --text: #333333;
+      --muted: #777777;
+      --border: #e0d6cf;
+      --radius-lg: 18px;
+      --radius-md: 10px;
+      --shadow-soft: 0 10px 25px rgba(0,0,0,0.06);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #ffe9e0 0, #f9f4f0 40%, #f9f4f0 100%);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .page-wrap {
+      width: 100%;
+      max-width: 980px;
+      padding: 24px 12px 40px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+      border: 1px solid var(--border);
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 32px 40px 36px;
+      }
+    }
+
+    .header {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .logo-wrap {
+      flex: 0 0 72px;
+      height: 72px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #fff7f3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffe1dd;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .title-block h1 {
+      font-size: 1.6rem;
+      margin: 0 0 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-tiny {
+      font-size: 0.75rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .title-block p {
+      margin: 4px 0 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .intro {
+      margin: 16px 0 22px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .intro strong {
+      color: var(--text);
+    }
+
+    form {
+      margin-top: 12px;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .field-group {
+      margin-bottom: 16px;
+    }
+
+    .field-inline {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .field-inline input[type="text"] {
+      flex: 1;
+      min-width: 180px;
+      padding: 8px 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    .question-card {
+      border-radius: var(--radius-md);
+      background: #fff9f6;
+      border: 1px solid #f8ddd2;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .question-title {
+      font-size: 0.94rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .question-help {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+
+    .option input[type="radio"] {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .option label {
+      cursor: pointer;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f05454, #f78f6a);
+      border: none;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(240, 84, 84, 0.3);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(240, 84, 84, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px dashed #f1b7a3;
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .result-panel {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      border: 1px dashed #f1b7a3;
+      background: #fff7f3;
+      display: none;
+    }
+
+    .result-panel h2 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+    }
+
+    .result-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ffe1dd;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+    .result-panel p {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .result-meta {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .log-card {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid #e3dad4;
+      background: #fcfaf8;
+    }
+
+    .log-card h3 {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .log-card p {
+      margin: 0 0 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .log-table-wrap {
+      max-height: 220px;
+      overflow: auto;
+      border-radius: 10px;
+      border: 1px solid #eee2da;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.8rem;
+    }
+
+    th, td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #f0e4dd;
+      white-space: nowrap;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f7efe8;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .pill-small {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #ffe1dd;
+      font-size: 0.72rem;
+      color: #a74646;
+      font-weight: 600;
+    }
+
+    .error-msg {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: #b00020;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="card">
+      <header class="header">
+        <div class="logo-wrap">
+          <!-- TODO: replace with your real MiniPaws logo or banner -->
+          <img src="images/minipaws-logo.jpg" alt="MiniPaws Logo" />
+        </div>
+        <div class="title-block">
+          <h1>MiniPaws Tiny Poodle Match 🐩</h1>
+          <div class="badge-tiny">Interactive questionnaire</div>
+          <p>Answer a few quick questions and we’ll suggest the Miniature Poodle personality that fits your lifestyle.</p>
+        </div>
+      </header>
+
+      <p class="intro">
+        <strong>How it works:</strong> enter your name, choose one answer per question (A–D),
+        and hit <strong>Get My Match</strong>. We’ll show your
+        <em>poodle personality match</em> and keep a record of all submissions below.
+      </p>
+
+      <form id="poodle-form">
+        <div class="field-group">
+          <div class="section-label">About you</div>
+          <div class="field-inline">
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              placeholder="Your name or Facebook username"
+              autocomplete="name"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Questions -->
+        <div class="section-label">Lifestyle & Home</div>
+
+        <div class="question-card">
+          <div class="question-title">1. How many hours per day can you spend with your dog?</div>
+          <div class="question-help">(Interaction, cuddles, training, walks)</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q1a" name="q1" value="A" />
+              <label for="q1a">A – Less than 2 hours</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q1b" name="q1" value="B" />
+              <label for="q1b">B – 2–4 hours</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q1c" name="q1" value="C" />
+              <label for="q1c">C – 4–6 hours</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q1d" name="q1" value="D" />
+              <label for="q1d">D – More than 6 hours</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-title">2. What best describes your home?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q2a" name="q2" value="A" />
+              <label for="q2a">A – Apartment</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q2b" name="q2" value="B" />
+              <label for="q2b">B – House (no yard)</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q2c" name="q2" value="C" />
+              <label for="q2c">C – House with small backyard</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q2d" name="q2" value="D" />
+              <label for="q2d">D – House with large yard</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-title">3. How easy is outdoor access for you?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q3a" name="q3" value="A" />
+              <label for="q3a">A – Hard to reach / almost none</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q3b" name="q3" value="B" />
+              <label for="q3b">B – Small outdoor area sometimes</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q3c" name="q3" value="C" />
+              <label for="q3c">C – Park within 10–15 minutes</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q3d" name="q3" value="D" />
+              <label for="q3d">D – Lots of open outdoor space nearby</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-title">4. How many walks per day fit your routine?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q4a" name="q4" value="A" />
+              <label for="q4a">A – 1 walk</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q4b" name="q4" value="B" />
+              <label for="q4b">B – 2 walks</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q4c" name="q4" value="C" />
+              <label for="q4c">C – 3 walks</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q4d" name="q4" value="D" />
+              <label for="q4d">D – 4 or more walks</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Bond, Grooming & Experience</div>
+
+        <div class="question-card">
+          <div class="question-title">5. What kind of bond are you looking for?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q5a" name="q5" value="A" />
+              <label for="q5a">A – Mostly cuddles and companionship</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q5b" name="q5" value="B" />
+              <label for="q5b">B – Play + light training</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q5c" name="q5" value="C" />
+              <label for="q5c">C – Tricks and daily mental games</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q5d" name="q5" value="D" />
+              <label for="q5d">D – Agility, sports, advanced training</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-title">6. Grooming readiness (poodles need regular grooming!)</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q6a" name="q6" value="A" />
+              <label for="q6a">A – Prefer low grooming</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q6b" name="q6" value="B" />
+              <label for="q6b">B – Can handle occasional grooming</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q6c" name="q6" value="C" />
+              <label for="q6c">C – OK with grooming every 4–6 weeks</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q6d" name="q6" value="D" />
+              <label for="q6d">D – I actually enjoy grooming / styling</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-title">7. What is your dog experience level?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q7a" name="q7" value="A" />
+              <label for="q7a">A – First dog ever</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q7b" name="q7" value="B" />
+              <label for="q7b">B – Had dogs before, but not recently</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q7c" name="q7" value="C" />
+              <label for="q7c">C – Experienced dog owner</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q7d" name="q7" value="D" />
+              <label for="q7d">D – Very experienced with smart small breeds</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Energy & Priorities</div>
+
+        <div class="question-card">
+          <div class="question-title">8. What energy level fits you best?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q8a" name="q8" value="A" />
+              <label for="q8a">A – Calm and relaxed dog</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q8b" name="q8" value="B" />
+              <label for="q8b">B – Medium energy, easy to manage</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q8c" name="q8" value="C" />
+              <label for="q8c">C – Smart + active but manageable indoors</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q8d" name="q8" value="D" />
+              <label for="q8d">D – Very energetic, “always on the go”</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-title">9. When choosing your poodle, what matters the most?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q9a" name="q9" value="A" />
+              <label for="q9a">A – Affectionate nature</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q9b" name="q9" value="B" />
+              <label for="q9b">B – Trainability</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q9c" name="q9" value="C" />
+              <label for="q9c">C – Health & genetics</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q9d" name="q9" value="D" />
+              <label for="q9d">D – Temperament & confidence</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q9e" name="q9" value="E" />
+              <label for="q9e">E – Intelligence</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q9f" name="q9" value="F" />
+              <label for="q9f">F – Looks / coat color</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-title">10. What level of daily routine are you comfortable with?</div>
+          <div class="options">
+            <div class="option">
+              <input type="radio" id="q10a" name="q10" value="A" />
+              <label for="q10a">A – 1–2 walks + simple play</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q10b" name="q10" value="B" />
+              <label for="q10b">B – 2 walks + some training</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q10c" name="q10" value="C" />
+              <label for="q10c">C – Walks + daily mental games</label>
+            </div>
+            <div class="option">
+              <input type="radio" id="q10d" name="q10" value="D" />
+              <label for="q10d">D – Structured sport + daily outdoor time</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">Get My Match</button>
+          <button type="button" class="btn-secondary" id="resetFormBtn">
+            Clear form
+          </button>
+          <span class="pill-small">MiniPaws • Tiny Poodle Edition</span>
+        </div>
+
+        <div id="error" class="error-msg" aria-live="polite"></div>
+      </form>
+
+      <section id="result" class="result-panel">
+        <h2>Your MiniPaws Match</h2>
+        <div class="result-chip" id="resultPersona"></div>
+        <p id="resultMessage"></p>
+        <div class="result-meta" id="resultMeta"></div>
+      </section>
+
+      <section class="log-card" aria-label="Responses log">
+        <h3>Responses log 📋</h3>
+        <p>
+          This table stays in your browser session and helps you copy answers into
+          Google Sheets. You can refresh the page to clear it.
+        </p>
+        <div class="log-table-wrap">
+          <table id="logTable">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Match</th>
+                <th>A–J answers</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- entries go here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("poodle-form");
+    const errorEl = document.getElementById("error");
+    const resultPanel = document.getElementById("result");
+    const resultPersonaEl = document.getElementById("resultPersona");
+    const resultMessageEl = document.getElementById("resultMessage");
+    const resultMetaEl = document.getElementById("resultMeta");
+    const logTableBody = document.querySelector("#logTable tbody");
+    const resetFormBtn = document.getElementById("resetFormBtn");
+
+    const questions = [
+      "q1","q2","q3","q4","q5",
+      "q6","q7","q8","q9","q10"
+    ];
+
+    function scoreFromLetter(letter, questionIndex) {
+      if (!letter) return 0;
+
+      // Priority Trait (q9, index 8)
+      if (questionIndex === 8) {
+        switch (letter) {
+          case "A": return 2; // Affection
+          case "B": // Trainability
+          case "C": // Health
+          case "D": // Temperament
+          case "E": // Intelligence
+            return 3;
+          case "F": // Looks / coat
+            return 1;
+          default:
+            return 0;
+        }
+      }
+
+      // Default mapping A=1, B=2, C=3, D=4 for others
+      switch (letter) {
+        case "A": return 1;
+        case "B": return 2;
+        case "C": return 3;
+        case "D": return 4;
+        default: return 0;
+      }
+    }
+
+    function personalityFromScore(score) {
+      if (score <= 18) {
+        return "Lap Companion 🐩";
+      } else if (score <= 28) {
+        return "Balanced Poodle 🐾";
+      } else if (score <= 38) {
+        return "Clever Poodle 🧠";
+      } else {
+        return "Poodle Athlete ⭐";
+      }
+    }
+
+    function messageFromPersona(persona) {
+      switch (persona) {
+        case "Lap Companion 🐩":
+          return "Your ideal Miniature Poodle is calm, affectionate, great indoors, and happy with 1–2 relaxed walks per day.";
+        case "Balanced Poodle 🐾":
+          return "Your ideal Miniature Poodle is adaptable and playful, enjoys 2 daily walks and light, fun training.";
+        case "Clever Poodle 🧠":
+          return "Your ideal Miniature Poodle will thrive on trick training, puzzle games, and 2–3 structured walks per day.";
+        case "Poodle Athlete ⭐":
+        default:
+          return "Your ideal Miniature Poodle enjoys agility, sports, structured training, park time, and 3–4+ walks per day!";
+      }
+    }
+
+    function formatTime(date) {
+      const pad = n => (n < 10 ? "0" + n : n);
+      const y = date.getFullYear();
+      const m = pad(date.getMonth() + 1);
+      const d = pad(date.getDate());
+      const hh = pad(date.getHours());
+      const mm = pad(date.getMinutes());
+      return `${y}-${m}-${d} ${hh}:${mm}`;
+    }
+
+    function addToLog(timestamp, name, score, persona, answersArray) {
+      const row = document.createElement("tr");
+
+      const tdTime = document.createElement("td");
+      tdTime.textContent = timestamp;
+      row.appendChild(tdTime);
+
+      const tdName = document.createElement("td");
+      tdName.textContent = name || "(no name)";
+      row.appendChild(tdName);
+
+      const tdScore = document.createElement("td");
+      tdScore.textContent = score;
+      row.appendChild(tdScore);
+
+      const tdPersona = document.createElement("td");
+      tdPersona.textContent = persona;
+      row.appendChild(tdPersona);
+
+      const tdAnswers = document.createElement("td");
+      tdAnswers.textContent = answersArray.join("-");
+      row.appendChild(tdAnswers);
+
+      logTableBody.appendChild(row);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      errorEl.textContent = "";
+      const name = document.getElementById("userName").value.trim();
+
+      if (!name) {
+        errorEl.textContent = "Please enter your name or Facebook username.";
+        return;
+      }
+
+      const answers = [];
+      for (let i = 0; i < questions.length; i++) {
+        const qName = questions[i];
+        const checked = form.querySelector(`input[name="${qName}"]:checked`);
+        if (!checked) {
+          errorEl.textContent = "Please answer all questions before getting your match.";
+          return;
+        }
+        answers.push(checked.value);
+      }
+
+      // Compute score
+      let score = 0;
+      answers.forEach((letter, index) => {
+        score += scoreFromLetter(letter, index);
+      });
+
+      const persona = personalityFromScore(score);
+      const message = messageFromPersona(persona);
+      const timestamp = formatTime(new Date());
+
+      // Display result panel
+      resultPersonaEl.textContent = persona;
+      resultMessageEl.textContent = message;
+      resultMetaEl.textContent =
+        `Score: ${score} • Answers: ${answers.join("-")} • Time: ${timestamp}`;
+      resultPanel.style.display = "block";
+
+      // Add to on-page log
+      addToLog(timestamp, name, score, persona, answers);
+
+      // Example: send to your backend / Google Apps Script endpoint
+      // Uncomment and replace "YOUR_ENDPOINT_URL" when ready.
+      /*
+      const payload = {
+        timestamp,
+        name,
+        answers,
+        score,
+        persona
+      };
+
+      fetch("YOUR_ENDPOINT_URL", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).catch(err => {
+        console.error("Failed to send response", err);
+      });
+      */
+    });
+
+    resetFormBtn.addEventListener("click", () => {
+      form.reset();
+      errorEl.textContent = "";
+      resultPanel.style.display = "none";
+    });
+  </script>
+</body>
+</html>
